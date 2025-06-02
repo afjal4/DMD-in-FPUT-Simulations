@@ -2,9 +2,8 @@ using Plots
 import DifferentialEquations: ODESolution
 
 function displacement_gif(sol::ODESolution)
+    N = length(sol.u[1]) ÷ 2
     anim = @animate for i in 1:length(sol.t)
-        # Calculate N from solution vector length (each state has 2N elements)
-        N = length(sol.u[i]) ÷ 2
         q = sol.u[i][1:N]
         # Create array including fixed endpoints
         q_full = [0.0; q; 0.0]  # [q₀, q₁, ..., qₙ, qₙ₊₁]

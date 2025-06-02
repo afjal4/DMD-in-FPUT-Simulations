@@ -1,23 +1,28 @@
 #Naive Simulation for small N
-#SVD to find modes
+#SVD to find modes ##WIP
 
 using DifferentialEquations, Plots
 include("visualisers.jl")
+include("benchmarking.jl")
 include("ode_system.jl")
-gr()
 
 # Parameters
-N = 50               # number of particles
-α = 0.0              # nonlinearity coefficients:
-β = 0.25             # 
-t = 100.0            # time span
+N = 10000             # number of particles
+α = 0.5              # nonlinearity coefficients:
+β = 0.5             # 
+t = 1000.0            # time span
 
 prob = ODE_problem(N, α, β, t)
-sol = solve(prob, Tsit5(), reltol=1e-6, abstol=1e-6)
+sol1 = solve(prob, Tsit5(), reltol=1e-6, abstol=1e-6)
+sol2 = solve(prob, KenCarp47(linsolve = KrylovJL_GMRES()), reltol=1e-6, abstol=1e-6)
+#GIF
 
-# Display the animation
-#animation = displacement_gif(sol)
-#display(gif(animation, fps=30))
+#=
+anim = displacement_gif(sol)
+display(gif(anim, fps=30))
+=#
 
-println("Generating heatmap...")
-display(displacement_heatmap(sol))
+#Plots
+#display(displacement_heatmap(sol2))
+display(total_energy_plot(sol2, α, β))
+#display(total_energy_plot([sol1,sol2], α, β))
