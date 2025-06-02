@@ -15,8 +15,8 @@ t = 1000.0            # time span
 prob = ODE_problem(N, α, β, t)
 sol1 = solve(prob, Tsit5(), reltol=1e-6, abstol=1e-6)
 sol2 = solve(prob, KenCarp47(linsolve = KrylovJL_GMRES()), reltol=1e-6, abstol=1e-6)
-#GIF
 
+#GIF
 #=
 anim = displacement_gif(sol)
 display(gif(anim, fps=30))

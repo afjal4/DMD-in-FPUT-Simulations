@@ -45,8 +45,6 @@ function ODE_problem(N, α, β, t)
     return prob
 end
 
-
-## vvv not working yet vvv ##
 # Second order ODE problem for FPUT
 function rhs_2nd_order!(d2q, q, p, t)
     N, α, β = p

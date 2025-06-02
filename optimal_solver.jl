@@ -18,8 +18,8 @@ prob = ODE_problem(N, α, β, t)
 prob2 = second_order_ODE_problem(N, α, β, t)
 
 #sol = solve(prob, solver, abstol=1e-8, reltol=1e-6)
-#sol = solve(prob2, VelocityVerlet(), dt = 0.01)
-sol = solve(prob)
+sol = solve(prob2, VelocityVerlet(), dt = 0.01)
+#sol = solve(prob)
 
 println(1)
 
