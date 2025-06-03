@@ -73,3 +73,18 @@ function total_energy_plot(sols::Vector{ODESolution}, α, β)
     title!(plt, "Total Energy of FPUT Chain Over Time")
     return plt
 end
+
+function eigenvalues_plot(eigenvalues::Vector)
+    plt = plot()
+    phases = length(eigenvalues)
+    
+    colours = cgrad(:bluesreds, phases)
+    for (i, Λ) in enumerate(eigenvalues)
+        plot!(plt, real.(Λ), imag.(Λ), seriestype=:scatter, color= colours[i], 
+              label="Phase $i", markersize=5)
+    end
+    xlabel!(plt, "Real Part")
+    ylabel!(plt, "Imaginary Part; Frequency")
+    title!(plt, "Eigenvalues of FPUT Chain Over Time")
+    return plt
+end

@@ -1,3 +1,6 @@
+using DifferentialEquations, Plots
+
+
 # FPUT RHS function: du/dt = f(u,t)
 function fput_rhs!(du, u, p, t)
     N, α, β = p               # number of particles, nonlinearity coefficients
@@ -37,7 +40,7 @@ function ODE_problem(N, α, β, t)
     p0 = zeros(N)
 
     #Initial Preturbation
-    q0 = [0.1 * sin(2*pi*i/N) for i in 1:N]
+    q0 = [0.1 * sin(4*pi*i/N) for i in 1:N]
 
     u0 = [q0; p0]
     tspan = (0.0, t)
