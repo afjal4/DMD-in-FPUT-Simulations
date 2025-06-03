@@ -18,7 +18,7 @@ function displacement_gif(sol::ODESolution)
     return anim
 end
 
-function displacement_heatmap(sol::ODESolution)
+function displacement_heatmap(sol::ODESolution, show=false)
     N = length(sol.u[1]) ÷ 2
     # Create a matrix of displacements over time
     # Each row is a time point, each column is a particle position
@@ -33,7 +33,8 @@ function displacement_heatmap(sol::ODESolution)
                   title="Displacement Heatmap",
                   aspect_ratio=:auto,
                   colorbar_title="Displacement")
-
+    if show
+        display(plt)
     return hmap
 end
 
@@ -61,7 +62,7 @@ function hamiltonian(sol::ODESolution, α, β)
     return energy
 end
 
-function total_energy_plot(sols::Vector{ODESolution}, α, β)
+function hamiltonian_plot(sols::Vector{ODESolution}, α, β, show=false)
     plt = plot()
     plt.title = "Total Energy of FPUT Chain Over Time"
 
@@ -71,10 +72,12 @@ function total_energy_plot(sols::Vector{ODESolution}, α, β)
     xlabel!(plt, "Time")
     ylabel!(plt, "Total Energy")
     title!(plt, "Total Energy of FPUT Chain Over Time")
+    if show
+        display(plt)
     return plt
 end
 
-function eigenvalues_plot(eigenvalues::Vector)
+function eigenvalues_plot(eigenvalues::Vector, show=false)
     plt = plot()
     phases = length(eigenvalues)
     
@@ -86,5 +89,7 @@ function eigenvalues_plot(eigenvalues::Vector)
     xlabel!(plt, "Real Part")
     ylabel!(plt, "Imaginary Part; Frequency")
     title!(plt, "Eigenvalues of FPUT Chain Over Time")
+    if show
+        display(plt)
     return plt
 end
