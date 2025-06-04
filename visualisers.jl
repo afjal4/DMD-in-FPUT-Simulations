@@ -18,7 +18,7 @@ function displacement_gif(sol::ODESolution)
     return anim
 end
 
-function displacement_heatmap(sol::ODESolution, show=false)
+function displacement_heatmap(sol::ODESolution; show::Bool=false)
     N = length(sol.u[1]) ÷ 2
     # Create a matrix of displacements over time
     # Each row is a time point, each column is a particle position
@@ -35,6 +35,7 @@ function displacement_heatmap(sol::ODESolution, show=false)
                   colorbar_title="Displacement")
     if show
         display(plt)
+    end
     return hmap
 end
 
@@ -62,7 +63,7 @@ function hamiltonian(sol::ODESolution, α, β)
     return energy
 end
 
-function hamiltonian_plot(sols::Vector{ODESolution}, α, β, show=false)
+function hamiltonian_plot(sols::Vector{ODESolution}, α, β; show::Bool=false)
     plt = plot()
     plt.title = "Total Energy of FPUT Chain Over Time"
 
@@ -74,22 +75,30 @@ function hamiltonian_plot(sols::Vector{ODESolution}, α, β, show=false)
     title!(plt, "Total Energy of FPUT Chain Over Time")
     if show
         display(plt)
+    end
     return plt
 end
 
-function eigenvalues_plot(eigenvalues::Vector, show=false)
+function eigenvalues_plot(eigenvalues::Vector; show::Bool=false)
     plt = plot()
     phases = length(eigenvalues)
     
+    
     colours = cgrad(:bluesreds, phases)
+
     for (i, Λ) in enumerate(eigenvalues)
-        plot!(plt, real.(Λ), imag.(Λ), seriestype=:scatter, color= colours[i], 
-              label="Phase $i", markersize=5)
+        lnΛ = Λ
+        plot!(plt, real.(lnΛ), imag.(lnΛ)/2π, 
+        seriestype=:scatter, 
+        color= colours[i], 
+        markersize=2,
+        legend = false)
     end
     xlabel!(plt, "Real Part")
     ylabel!(plt, "Imaginary Part; Frequency")
     title!(plt, "Eigenvalues of FPUT Chain Over Time")
     if show
         display(plt)
+    end
     return plt
 end

@@ -70,4 +70,4 @@ sol = solve(ODE_problem(N, α, β, t),
 
 evals_progression, modes_progression = mode_decomposition(sol, phases, shift)
 
-display(eigenvalues_plot(evals_progression))
+eigenvalues_plot(evals_progression, show = true)
