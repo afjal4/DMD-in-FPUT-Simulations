@@ -52,22 +52,26 @@ function mode_decomposition(sol, phases = 1, shift = 0.1, r = 5, use_randsvd = f
         push!(eigenvalues, Λ)
         push!(modes, modes_from_phase)
     end
-    return eigenvalues, modes
+    return eigenvalues, modes, (X_length, Δt, phase_size)
 end
 
 N = 500
 t = 10000
 α = 0.5
 β = 0.75
+sampling_interval = 1 # time between samples
 
 phases = 100
 shift = 0.1 # size /1 of shift from X to X'
 
 sol = solve(ODE_problem(N, α, β, t), 
             KenCarp47(linsolve = KrylovJL_GMRES()),
-            saveat=1, 
+            saveat=sampling_interval, 
             reltol=1e-6, abstol=1e-6)
 
-evals_progression, modes_progression = mode_decomposition(sol, phases, shift)
+evals_progression, modes_progression, p = mode_decomposition(sol, phases, shift)
+X_length, Δt, phase_size = p
+DMD_time = Δt * sampling_interval
 
-eigenvalues_plot(evals_progression, show = true)
+
+transformed_eigenvalues_plot(evals_progression, DMD_time, show = true)

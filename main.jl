@@ -11,8 +11,10 @@ N = 100             # number of particles
 β = 0.5             # 
 t = 100.0            # time span
 
-prob = ODE_problem(N, α, β, t)
-sol1 = solve(prob, Tsit5(), reltol=1e-6, abstol=1e-6)
+
+
+prob = ODE_problem(N, α, β, t; use_jvp = true)
+sol = solve(prob, TRBDF2())
 #sol2 = solve(prob, KenCarp47(linsolve = KrylovJL_GMRES()), reltol=1e-6, abstol=1e-6)
 
 #GIF

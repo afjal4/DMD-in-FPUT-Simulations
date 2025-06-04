@@ -1,5 +1,5 @@
 using DifferentialEquations, Plots
-
+include("optimal_solver.jl")
 
 # FPUT RHS function: du/dt = f(u,t)
 function fput_rhs!(du, u, p, t)
@@ -34,7 +34,7 @@ function fput_rhs!(du, u, p, t)
 end
 
 #Wrapper to set up the ODE problem
-function ODE_problem(N, α, β, t)
+function ODE_problem(N, α, β, t; use_jvp = false)
     p = (N, α, β)
     q0 = zeros(N)
     p0 = zeros(N)
@@ -44,7 +44,11 @@ function ODE_problem(N, α, β, t)
 
     u0 = [q0; p0]
     tspan = (0.0, t)
-    prob = ODEProblem(fput_rhs!, u0, tspan, p)
+
+    f = (use_jvp) ? ODEFunction(fput_rhs!, jvp = jvp!) :
+                  ODEFunction(fput_rhs!)
+
+    prob = ODEProblem(f, u0, tspan, p)
     return prob
 end
 

@@ -87,18 +87,42 @@ function eigenvalues_plot(eigenvalues::Vector; show::Bool=false)
     colours = cgrad(:bluesreds, phases)
 
     for (i, Λ) in enumerate(eigenvalues)
-        lnΛ = Λ
-        plot!(plt, real.(lnΛ), imag.(lnΛ)/2π, 
+        plot!(plt, real.(Λ), imag.(Λ), 
         seriestype=:scatter, 
         color= colours[i], 
         markersize=2,
         legend = false)
     end
     xlabel!(plt, "Real Part")
-    ylabel!(plt, "Imaginary Part; Frequency")
+    ylabel!(plt, "Imaginary Part")
     title!(plt, "Eigenvalues of FPUT Chain Over Time")
     if show
         display(plt)
     end
     return plt
 end
+
+function transformed_eigenvalues_plot(eigenvalues::Vector, Δt; show::Bool=false)
+    plt = plot()
+    phases = length(eigenvalues)
+    
+    colours = cgrad(:bluesreds, phases)
+
+    transformed_evals = [ln.(evals) ./ Δt for evals in eigenvalues]
+    for (i, Λ) in enumerate(transformed_evals)
+        plot!(plt, real.(Λ), imag.(Λ), 
+        seriestype=:scatter, 
+        color= colours[i], 
+        markersize=2,
+        legend = false)
+    end
+    xlabel!(plt, "Real Part; Growth Rate")
+    ylabel!(plt, "Imaginary Part; Frequency")
+    title!(plt, "Transformed Eigenvalues of FPUT Chain Over Time")
+    if show
+        display(plt)
+    end
+    return plt
+end
+
+    
