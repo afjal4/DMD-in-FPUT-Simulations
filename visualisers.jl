@@ -20,16 +20,17 @@ end
 
 function displacement_heatmap(sol::ODESolution; show::Bool=false)
     N = length(sol.u[1]) ÷ 2
+    nt = length(sol.t)
     # Create a matrix of displacements over time
     # Each row is a time point, each column is a particle position
-    displacement_matrix = zeros(length(sol.t), N)
-    for (i, t) in enumerate(sol.t)
-        displacement_matrix[i, :] = sol.u[i][1:N]
+    displacement_matrix = zeros(N, nt)
+    for i in 1:nt
+        displacement_matrix[:, i] = sol.u[i][1:N]
     end
     
     hmap = heatmap(displacement_matrix, 
-                  xlabel="Position in chain", 
-                  ylabel="Time step",
+                  xlabel="Time step", 
+                  ylabel="Position in chain",
                   title="Displacement Heatmap",
                   aspect_ratio=:auto,
                   colorbar_title="Displacement")
@@ -61,6 +62,10 @@ function hamiltonian(sol::ODESolution, α, β)
         energy[j] = kinetic_energy + potential_energy
     end
     return energy
+end
+
+function hamiltonian_plot(sol, α, β; show::Bool=false)
+    hamiltonian_plot([sol], α, β; show=show)
 end
 
 function hamiltonian_plot(sols::Vector{ODESolution}, α, β; show::Bool=false)
@@ -108,7 +113,7 @@ function transformed_eigenvalues_plot(eigenvalues::Vector, Δt; show::Bool=false
     
     colours = cgrad(:bluesreds, phases)
 
-    transformed_evals = [ln.(evals) ./ Δt for evals in eigenvalues]
+    transformed_evals = [log.(evals) ./ Δt for evals in eigenvalues]
     for (i, Λ) in enumerate(transformed_evals)
         plot!(plt, real.(Λ), imag.(Λ), 
         seriestype=:scatter, 
